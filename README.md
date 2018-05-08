@@ -25,7 +25,7 @@ go get -u -v "gitee.com/xel233/avgo"
 
 #### 使用说明
 
-1. [example](https://gitee.com/xel233/avgo/tree/dev/example)
+1. [example](https://github.com/Xel233/avgo/tree/master/example)
 
 #### 参与贡献
 
