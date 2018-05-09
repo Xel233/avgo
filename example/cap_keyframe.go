@@ -12,9 +12,9 @@ func main() {
 	start := time.Now().Unix()
 	avformat.AvRegisterAll()
 	fi := "sample.mp4"
-	pFormatCtx, err := avformat.AvformatOpenInput(fi, nil, nil)
-	if err != nil {
-		panic(err.Error())
+	var pFormatCtx *avformat.AVFormatContext
+	if avformat.AvformatOpenInput(&pFormatCtx, fi, nil, nil) < 0 {
+		panic("can not open file")
 	}
 	defer pFormatCtx.Close()
 	if pFormatCtx.AvformatFindStreamInfo(nil) < 0 {
