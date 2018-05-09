@@ -32,7 +32,7 @@ func (this *AVFormatContext) Duration() int64 {
 
 func (this *AVFormatContext) AvformatFindStreamInfo(options **AVDictionary) int {
 	return int(C.avformat_find_stream_info(
-		(*C.struct_AVFormatContext)(unsafe.Pointer(this)),
+		this.cptr(),
 		(**C.struct_AVDictionary)(unsafe.Pointer(&options)),
 	))
 }
