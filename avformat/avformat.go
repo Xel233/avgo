@@ -21,9 +21,11 @@ func AvRegisterAll() {
 }
 
 func AvformatOpenInput(ps **AVFormatContext, url string, fmt *AVInputFormat, options **AVDictionary) int {
+	UrlCString := C.CString(url)
+	defer C.free(unsafe.Pointer(UrlCString))
 	return int(C.avformat_open_input(
 		(**C.struct_AVFormatContext)(unsafe.Pointer(ps)),
-		C.CString(url),
+		UrlCString,
 		(*C.struct_AVInputFormat)(unsafe.Pointer(fmt)),
 		(**C.struct_AVDictionary)(unsafe.Pointer(options)),
 	))

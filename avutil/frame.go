@@ -24,6 +24,21 @@ func (this *AVFrame) cptr() *C.struct_AVFrame {
 	return (*C.struct_AVFrame)(unsafe.Pointer(this))
 }
 
+func (this *AVFrame) getYCbCr420() (Y, Cb, Cr []byte) {
+	f := this.cptr()
+	w, h := int(f.linesize[0]), int(f.height)
+	if d0 := unsafe.Pointer(f.data[0]); d0 != nil {
+		Y = C.GoBytes(d0, C.int(w*h))
+	}
+	if d1 := unsafe.Pointer(f.data[1]); d1 != nil {
+		Cb = C.GoBytes(d1, C.int(int(f.linesize[1])*h/2))
+	}
+	if d2 := unsafe.Pointer(f.data[2]); d2 != nil {
+		Cr = C.GoBytes(d2, C.int(int(f.linesize[2])*h/2))
+	}
+	return
+}
+
 func (this *AVFrame) Free() {
 	cptr := this.cptr()
 	C.av_frame_free(&cptr)
@@ -37,17 +52,13 @@ func (this *AVFrame) GetImage() *ImageYCbCr {
 	f := this.cptr()
 	w, h := int(f.linesize[0]), int(f.height)
 	r := image.Rectangle{image.Point{0, 0}, image.Point{w, h}}
-	img := image.NewYCbCr(r, image.YCbCrSubsampleRatio420)
-	img.Y = C.GoBytes(unsafe.Pointer(f.data[0]), C.int(w*h))
-	wCb := int(f.linesize[1])
-	if unsafe.Pointer(f.data[1]) != nil {
-		img.Cb = C.GoBytes(unsafe.Pointer(f.data[1]), C.int(wCb*h/2))
+	ycbcr := image.NewYCbCr(r, image.YCbCrSubsampleRatio420)
+	ycbcr.Y, ycbcr.Cb, ycbcr.Cr = this.getYCbCr420()
+	subR := image.Rectangle{
+		image.Point{0, 0},
+		image.Point{int(f.width),int(f.height)},
 	}
-	wCr := int(f.linesize[2])
-	if unsafe.Pointer(f.data[2]) != nil {
-		img.Cr = C.GoBytes(unsafe.Pointer(f.data[2]), C.int(wCr*h/2))
-	}
-	return (*ImageYCbCr)(img)
+	return (*ImageYCbCr)(ycbcr.SubImage(subR).(*image.YCbCr))
 }
 
 func (this *AVFrame) Data() [8]*C.uint8_t {
