@@ -13,12 +13,12 @@ package avcodec
 //#include <libavdevice/avdevice.h>
 import "C"
 import (
-	"unsafe"
 	"github.com/xel233/avgo/avutil"
+	"unsafe"
 )
 
 func (this *AVCodecContext) cptr() *C.struct_AVCodecContext {
-	return (*C.struct_AVCodecContext)(this)
+	return (*C.struct_AVCodecContext)(unsafe.Pointer(this))
 }
 
 func (this *AVCodecContext) Close() {

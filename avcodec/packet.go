@@ -12,9 +12,10 @@ package avcodec
 //#include <libavutil/opt.h>
 //#include <libavdevice/avdevice.h>
 import "C"
+import "unsafe"
 
 func (this *AVPacket) cptr() *C.struct_AVPacket {
-	return (*C.struct_AVPacket)(this)
+	return (*C.struct_AVPacket)(unsafe.Pointer(this))
 }
 
 func (this *AVPacket) Free() {
