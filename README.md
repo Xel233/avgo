@@ -15,7 +15,7 @@ sudo apt-get install yasm
 export FFMPEG_ROOT=/usr/local/ffmpeg
 export CGO_LDFLAGS="-L$FFMPEG_ROOT/lib/ -lavcodec -lavformat -lavutil -lswscale -lswresample -lavdevice -lavfilter"
 export CGO_CFLAGS="-I$FFMPEG_ROOT/include"
-export LD_LIBRARY_PATH=$FFMPEG_ROOT/ffmpeg/lib
+export LD_LIBRARY_PATH=$FFMPEG_ROOT/lib
 export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$FFMPEG_ROOT/lib/pkgconfig
 ```
 3. 安装package
