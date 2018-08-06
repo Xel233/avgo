@@ -2,18 +2,18 @@ package main
 
 import (
 	"fmt"
-	"time"
-	"github.com/xel233/avgo/avformat"
 	"github.com/xel233/avgo/avcodec"
+	"github.com/xel233/avgo/avformat"
 	"github.com/xel233/avgo/avutil"
+	"time"
 )
 
 func main() {
 	start := time.Now().Unix()
 	avformat.AvRegisterAll()
 	fi := "sample.mp4"
-	var pFormatCtx *avformat.AVFormatContext
-	if avformat.AvformatOpenInput(&pFormatCtx, fi, nil, nil) < 0 {
+	pFormatCtx, ret := avformat.AvformatOpenInput2(fi, nil, nil)
+	if ret < 0 {
 		panic("can not open file")
 	}
 	defer pFormatCtx.Close()

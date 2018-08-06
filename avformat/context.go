@@ -13,8 +13,8 @@ package avformat
 //#include <libavdevice/avdevice.h>
 import "C"
 import (
-	"unsafe"
 	"github.com/xel233/avgo/avcodec"
+	"unsafe"
 )
 
 func (this *AVFormatContext) cptr() *C.struct_AVFormatContext {
@@ -22,8 +22,7 @@ func (this *AVFormatContext) cptr() *C.struct_AVFormatContext {
 }
 
 func (this *AVFormatContext) Close() {
-	cptr := this.cptr()
-	C.avformat_close_input(&cptr)
+	C.avformat_close_input((**C.struct_AVFormatContext)(unsafe.Pointer(&this)))
 }
 
 func (this *AVFormatContext) Duration() int64 {
@@ -55,4 +54,3 @@ func (this *AVFormatContext) Streams() []*AVStream {
 func (this *AVFormatContext) AvReadFrame(pkt *avcodec.AVPacket) int {
 	return int(C.av_read_frame((*C.struct_AVFormatContext)(unsafe.Pointer(this)), (*C.struct_AVPacket)(unsafe.Pointer(pkt))))
 }
-

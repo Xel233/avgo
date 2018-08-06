@@ -30,3 +30,16 @@ func AvformatOpenInput(ps **AVFormatContext, url string, fmt *AVInputFormat, opt
 		(**C.struct_AVDictionary)(unsafe.Pointer(options)),
 	))
 }
+
+func AvformatOpenInput2(url string, fmt *AVInputFormat, options **AVDictionary) (*AVFormatContext, int) {
+	UrlCString := C.CString(url)
+	defer C.free(unsafe.Pointer(UrlCString))
+	avfctx := C.avformat_alloc_context()
+	ret := int(C.avformat_open_input(
+		&avfctx,
+		C.CString(url),
+		(*C.struct_AVInputFormat)(unsafe.Pointer(fmt)),
+		(**C.struct_AVDictionary)(unsafe.Pointer(options)),
+	))
+	return (*AVFormatContext)(unsafe.Pointer(avfctx)), ret
+}
