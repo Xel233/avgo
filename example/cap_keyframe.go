@@ -43,11 +43,11 @@ func main() {
 	pFrame := avutil.AvFrameAlloc()
 	defer pFrame.Free()
 	i := 0
-	var packet avcodec.AVPacket
+	packet := avcodec.AvInitPakcet()
 	var frameFinished int
-	for int(pFormatCtx.AvReadFrame(&packet)) >= 0 {
+	for int(pFormatCtx.AvReadFrame(packet)) >= 0 {
 		if packet.StreamIndex() == videoStream {
-			pCodecCtx.AvcodecDecodeVideo2(pFrame, &frameFinished, &packet)
+			pCodecCtx.AvcodecDecodeVideo2(pFrame, &frameFinished, packet)
 			if frameFinished > 0 {
 				if pFrame.IsKeyFrame() {
 					filePath := fmt.Sprintf("keyframe_%d", i)
