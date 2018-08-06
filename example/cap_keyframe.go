@@ -42,7 +42,7 @@ func main() {
 	}
 	pFrame := avutil.AvFrameAlloc()
 	defer pFrame.Free()
-	i := 0
+	i := 1
 	packet := avcodec.AvInitPakcet()
 	var frameFinished int
 	for int(pFormatCtx.AvReadFrame(packet)) >= 0 {
@@ -50,8 +50,8 @@ func main() {
 			pCodecCtx.AvcodecDecodeVideo2(pFrame, &frameFinished, packet)
 			if frameFinished > 0 {
 				if pFrame.IsKeyFrame() {
-					filePath := fmt.Sprintf("keyframe_%d", i)
-					fmt.Printf("[%v]Captured %s\n", packet.PTS(), filePath)
+					filePath := fmt.Sprintf("keyframe_%d", packet.PTS())
+					fmt.Printf("[%v]Captured %s.jpeg\n", i, filePath)
 					go pFrame.GetImage().SaveJPEG(filePath, 50)
 					i++
 				}

@@ -18,7 +18,7 @@ func (this *AVPacket) cptr() *C.struct_AVPacket {
 }
 
 func (this *AVPacket) Free() {
-	C.av_free_packet((*C.struct_AVPacket)(this))
+	C.av_free_packet(this.cptr())
 }
 
 func (this *AVPacket) StreamIndex() int {
@@ -27,4 +27,8 @@ func (this *AVPacket) StreamIndex() int {
 
 func (this *AVPacket) PTS() int64 {
 	return int64(this.cptr().pts)
+}
+
+func (this *AVPacket) DTS() int64 {
+	return int64(this.cptr().dts)
 }
